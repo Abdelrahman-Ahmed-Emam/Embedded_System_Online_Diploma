@@ -1,0 +1,3 @@
+I read the STM32cubeide startup file and used it to write
+the extra lines in the startup to make it more 
+professional

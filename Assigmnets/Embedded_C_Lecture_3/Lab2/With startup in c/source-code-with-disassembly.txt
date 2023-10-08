@@ -1,0 +1,212 @@
+
+learn-in-depth-cortex.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000000 <vectors>:
+ 8000000:	0c 10 00 20 29 00 00 08 1d 00 00 08 1d 00 00 08     ... )...........
+ 8000010:	1d 00 00 08 1d 00 00 08 1d 00 00 08                 ............
+
+0800001c <Default_Handler>:
+extern uint32 _E_bss;
+extern int main(void);
+
+void Reset_Handler();
+void Default_Handler()
+{
+ 800001c:	b580      	push	{r7, lr}
+ 800001e:	af00      	add	r7, sp, #0
+    Reset_Handler();
+ 8000020:	f000 f802 	bl	8000028 <Reset_Handler>
+}
+ 8000024:	bf00      	nop
+ 8000026:	bd80      	pop	{r7, pc}
+
+08000028 <Reset_Handler>:
+    (uint32)&MM_Fault_Handler,
+    (uint32)&Bus_Fault_Handler,
+    (uint32)&Usage_Fault_Handler};
+
+void Reset_Handler()
+{
+ 8000028:	b580      	push	{r7, lr}
+ 800002a:	b086      	sub	sp, #24
+ 800002c:	af00      	add	r7, sp, #0
+    uint32 DATA_SIZE = (uint8 *)&_E_Data - (uint8 *)&_S_Data;
+ 800002e:	4a1a      	ldr	r2, [pc, #104]	; (8000098 <Reset_Handler+0x70>)
+ 8000030:	4b1a      	ldr	r3, [pc, #104]	; (800009c <Reset_Handler+0x74>)
+ 8000032:	1ad3      	subs	r3, r2, r3
+ 8000034:	60bb      	str	r3, [r7, #8]
+    uint8 *P_src = (uint8 *)&_E_Text;
+ 8000036:	4b1a      	ldr	r3, [pc, #104]	; (80000a0 <Reset_Handler+0x78>)
+ 8000038:	617b      	str	r3, [r7, #20]
+    uint8 *P_dst = (uint8 *)&_S_Data;
+ 800003a:	4b18      	ldr	r3, [pc, #96]	; (800009c <Reset_Handler+0x74>)
+ 800003c:	613b      	str	r3, [r7, #16]
+    int i = 0;
+ 800003e:	2300      	movs	r3, #0
+ 8000040:	60fb      	str	r3, [r7, #12]
+    for (; i < DATA_SIZE; i++)
+ 8000042:	e00a      	b.n	800005a <Reset_Handler+0x32>
+    {
+        *((uint8 *)P_dst++) = *((uint8 *)P_src++);
+ 8000044:	697a      	ldr	r2, [r7, #20]
+ 8000046:	1c53      	adds	r3, r2, #1
+ 8000048:	617b      	str	r3, [r7, #20]
+ 800004a:	693b      	ldr	r3, [r7, #16]
+ 800004c:	1c59      	adds	r1, r3, #1
+ 800004e:	6139      	str	r1, [r7, #16]
+ 8000050:	7812      	ldrb	r2, [r2, #0]
+ 8000052:	701a      	strb	r2, [r3, #0]
+    for (; i < DATA_SIZE; i++)
+ 8000054:	68fb      	ldr	r3, [r7, #12]
+ 8000056:	3301      	adds	r3, #1
+ 8000058:	60fb      	str	r3, [r7, #12]
+ 800005a:	68fb      	ldr	r3, [r7, #12]
+ 800005c:	68ba      	ldr	r2, [r7, #8]
+ 800005e:	429a      	cmp	r2, r3
+ 8000060:	d8f0      	bhi.n	8000044 <Reset_Handler+0x1c>
+    }
+
+    uint32 BSS_SIZE = (uint8 *)&_E_bss - (uint8 *)&_S_bss;
+ 8000062:	4a10      	ldr	r2, [pc, #64]	; (80000a4 <Reset_Handler+0x7c>)
+ 8000064:	4b10      	ldr	r3, [pc, #64]	; (80000a8 <Reset_Handler+0x80>)
+ 8000066:	1ad3      	subs	r3, r2, r3
+ 8000068:	607b      	str	r3, [r7, #4]
+    P_dst = (uint8 *)&_S_bss;
+ 800006a:	4b0f      	ldr	r3, [pc, #60]	; (80000a8 <Reset_Handler+0x80>)
+ 800006c:	613b      	str	r3, [r7, #16]
+    for (i = 0; i < BSS_SIZE; i++)
+ 800006e:	2300      	movs	r3, #0
+ 8000070:	60fb      	str	r3, [r7, #12]
+ 8000072:	e007      	b.n	8000084 <Reset_Handler+0x5c>
+    {
+        *((uint8 *)P_dst++) = ((uint8)0);
+ 8000074:	693b      	ldr	r3, [r7, #16]
+ 8000076:	1c5a      	adds	r2, r3, #1
+ 8000078:	613a      	str	r2, [r7, #16]
+ 800007a:	2200      	movs	r2, #0
+ 800007c:	701a      	strb	r2, [r3, #0]
+    for (i = 0; i < BSS_SIZE; i++)
+ 800007e:	68fb      	ldr	r3, [r7, #12]
+ 8000080:	3301      	adds	r3, #1
+ 8000082:	60fb      	str	r3, [r7, #12]
+ 8000084:	68fb      	ldr	r3, [r7, #12]
+ 8000086:	687a      	ldr	r2, [r7, #4]
+ 8000088:	429a      	cmp	r2, r3
+ 800008a:	d8f3      	bhi.n	8000074 <Reset_Handler+0x4c>
+    }
+
+    main();
+ 800008c:	f000 f80e 	bl	80000ac <main>
+}
+ 8000090:	bf00      	nop
+ 8000092:	3718      	adds	r7, #24
+ 8000094:	46bd      	mov	sp, r7
+ 8000096:	bd80      	pop	{r7, pc}
+ 8000098:	2000000c 	.word	0x2000000c
+ 800009c:	20000000 	.word	0x20000000
+ 80000a0:	0800015c 	.word	0x0800015c
+ 80000a4:	2000000c 	.word	0x2000000c
+ 80000a8:	2000000c 	.word	0x2000000c
+
+080000ac <main>:
+#include "stm32f103c.h"
+volatile Registers *GPIOAODR = (volatile Registers *)GPIO_Port_A_ODR;
+volatile Registers *GPIOACRH = (volatile Registers *)GPIO_Port_A_CRH;
+volatile Registers *RCCAPB = (volatile Registers *)RCC_APB2ENR;
+int main(void)
+{
+ 80000ac:	b480      	push	{r7}
+ 80000ae:	b083      	sub	sp, #12
+ 80000b0:	af00      	add	r7, sp, #0
+	RCCAPB->pins.pin2 = 1;
+ 80000b2:	4b27      	ldr	r3, [pc, #156]	; (8000150 <main+0xa4>)
+ 80000b4:	681a      	ldr	r2, [r3, #0]
+ 80000b6:	6813      	ldr	r3, [r2, #0]
+ 80000b8:	f043 0304 	orr.w	r3, r3, #4
+ 80000bc:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin19 = 0;
+ 80000be:	4b25      	ldr	r3, [pc, #148]	; (8000154 <main+0xa8>)
+ 80000c0:	681a      	ldr	r2, [r3, #0]
+ 80000c2:	6813      	ldr	r3, [r2, #0]
+ 80000c4:	f36f 43d3 	bfc	r3, #19, #1
+ 80000c8:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin20 = 1;
+ 80000ca:	4b22      	ldr	r3, [pc, #136]	; (8000154 <main+0xa8>)
+ 80000cc:	681a      	ldr	r2, [r3, #0]
+ 80000ce:	6813      	ldr	r3, [r2, #0]
+ 80000d0:	f443 1380 	orr.w	r3, r3, #1048576	; 0x100000
+ 80000d4:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin21 = 0;
+ 80000d6:	4b1f      	ldr	r3, [pc, #124]	; (8000154 <main+0xa8>)
+ 80000d8:	681a      	ldr	r2, [r3, #0]
+ 80000da:	6813      	ldr	r3, [r2, #0]
+ 80000dc:	f36f 5355 	bfc	r3, #21, #1
+ 80000e0:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin22 = 0;
+ 80000e2:	4b1c      	ldr	r3, [pc, #112]	; (8000154 <main+0xa8>)
+ 80000e4:	681a      	ldr	r2, [r3, #0]
+ 80000e6:	6813      	ldr	r3, [r2, #0]
+ 80000e8:	f36f 5396 	bfc	r3, #22, #1
+ 80000ec:	6013      	str	r3, [r2, #0]
+
+	while (1)
+	{
+		int i = 0;
+ 80000ee:	2300      	movs	r3, #0
+ 80000f0:	607b      	str	r3, [r7, #4]
+		for (i = 0; i < 5000; i++)
+ 80000f2:	2300      	movs	r3, #0
+ 80000f4:	607b      	str	r3, [r7, #4]
+ 80000f6:	e002      	b.n	80000fe <main+0x52>
+ 80000f8:	687b      	ldr	r3, [r7, #4]
+ 80000fa:	3301      	adds	r3, #1
+ 80000fc:	607b      	str	r3, [r7, #4]
+ 80000fe:	687b      	ldr	r3, [r7, #4]
+ 8000100:	f241 3287 	movw	r2, #4999	; 0x1387
+ 8000104:	4293      	cmp	r3, r2
+ 8000106:	ddf7      	ble.n	80000f8 <main+0x4c>
+			;
+		GPIOAODR->pins.pin13 = 1;
+ 8000108:	4b13      	ldr	r3, [pc, #76]	; (8000158 <main+0xac>)
+ 800010a:	681a      	ldr	r2, [r3, #0]
+ 800010c:	6813      	ldr	r3, [r2, #0]
+ 800010e:	f443 5300 	orr.w	r3, r3, #8192	; 0x2000
+ 8000112:	6013      	str	r3, [r2, #0]
+		for (i = 0; i < 5000; i++)
+ 8000114:	2300      	movs	r3, #0
+ 8000116:	607b      	str	r3, [r7, #4]
+ 8000118:	e002      	b.n	8000120 <main+0x74>
+ 800011a:	687b      	ldr	r3, [r7, #4]
+ 800011c:	3301      	adds	r3, #1
+ 800011e:	607b      	str	r3, [r7, #4]
+ 8000120:	687b      	ldr	r3, [r7, #4]
+ 8000122:	f241 3287 	movw	r2, #4999	; 0x1387
+ 8000126:	4293      	cmp	r3, r2
+ 8000128:	ddf7      	ble.n	800011a <main+0x6e>
+			;
+		GPIOAODR->pins.pin13 = 0;
+ 800012a:	4b0b      	ldr	r3, [pc, #44]	; (8000158 <main+0xac>)
+ 800012c:	681a      	ldr	r2, [r3, #0]
+ 800012e:	6813      	ldr	r3, [r2, #0]
+ 8000130:	f36f 334d 	bfc	r3, #13, #1
+ 8000134:	6013      	str	r3, [r2, #0]
+		for (i = 0; i < 5000; i++)
+ 8000136:	2300      	movs	r3, #0
+ 8000138:	607b      	str	r3, [r7, #4]
+ 800013a:	e002      	b.n	8000142 <main+0x96>
+ 800013c:	687b      	ldr	r3, [r7, #4]
+ 800013e:	3301      	adds	r3, #1
+ 8000140:	607b      	str	r3, [r7, #4]
+ 8000142:	687b      	ldr	r3, [r7, #4]
+ 8000144:	f241 3287 	movw	r2, #4999	; 0x1387
+ 8000148:	4293      	cmp	r3, r2
+ 800014a:	ddf7      	ble.n	800013c <main+0x90>
+	{
+ 800014c:	e7cf      	b.n	80000ee <main+0x42>
+ 800014e:	bf00      	nop
+ 8000150:	20000008 	.word	0x20000008
+ 8000154:	20000004 	.word	0x20000004
+ 8000158:	20000000 	.word	0x20000000

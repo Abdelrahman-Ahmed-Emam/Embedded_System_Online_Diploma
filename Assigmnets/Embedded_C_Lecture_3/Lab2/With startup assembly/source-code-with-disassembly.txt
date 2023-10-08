@@ -1,0 +1,135 @@
+
+learn-in-depth-cortex.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000000 <main-0x50>:
+ 8000000:	20001000 	.word	0x20001000
+ 8000004:	08000100 	.word	0x08000100
+ 8000008:	08000109 	.word	0x08000109
+ 800000c:	08000109 	.word	0x08000109
+ 8000010:	08000109 	.word	0x08000109
+ 8000014:	08000109 	.word	0x08000109
+ 8000018:	08000109 	.word	0x08000109
+ 800001c:	08000109 	.word	0x08000109
+ 8000020:	08000109 	.word	0x08000109
+ 8000024:	08000109 	.word	0x08000109
+ 8000028:	08000109 	.word	0x08000109
+ 800002c:	08000109 	.word	0x08000109
+ 8000030:	08000109 	.word	0x08000109
+ 8000034:	08000109 	.word	0x08000109
+ 8000038:	08000109 	.word	0x08000109
+ 800003c:	08000109 	.word	0x08000109
+ 8000040:	08000109 	.word	0x08000109
+ 8000044:	08000109 	.word	0x08000109
+ 8000048:	08000109 	.word	0x08000109
+ 800004c:	08000109 	.word	0x08000109
+
+08000050 <main>:
+#include "stm32f103c.h"
+volatile Registers *GPIOAODR = (volatile Registers *)GPIO_Port_A_ODR;
+volatile Registers *GPIOACRH = (volatile Registers *)GPIO_Port_A_CRH;
+volatile Registers *RCCAPB = (volatile Registers *)RCC_APB2ENR;
+int main(void)
+{
+ 8000050:	b480      	push	{r7}
+ 8000052:	b083      	sub	sp, #12
+ 8000054:	af00      	add	r7, sp, #0
+	RCCAPB->pins.pin2 = 1;
+ 8000056:	4b27      	ldr	r3, [pc, #156]	; (80000f4 <main+0xa4>)
+ 8000058:	681a      	ldr	r2, [r3, #0]
+ 800005a:	6813      	ldr	r3, [r2, #0]
+ 800005c:	f043 0304 	orr.w	r3, r3, #4
+ 8000060:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin19 = 0;
+ 8000062:	4b25      	ldr	r3, [pc, #148]	; (80000f8 <main+0xa8>)
+ 8000064:	681a      	ldr	r2, [r3, #0]
+ 8000066:	6813      	ldr	r3, [r2, #0]
+ 8000068:	f36f 43d3 	bfc	r3, #19, #1
+ 800006c:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin20 = 1;
+ 800006e:	4b22      	ldr	r3, [pc, #136]	; (80000f8 <main+0xa8>)
+ 8000070:	681a      	ldr	r2, [r3, #0]
+ 8000072:	6813      	ldr	r3, [r2, #0]
+ 8000074:	f443 1380 	orr.w	r3, r3, #1048576	; 0x100000
+ 8000078:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin21 = 0;
+ 800007a:	4b1f      	ldr	r3, [pc, #124]	; (80000f8 <main+0xa8>)
+ 800007c:	681a      	ldr	r2, [r3, #0]
+ 800007e:	6813      	ldr	r3, [r2, #0]
+ 8000080:	f36f 5355 	bfc	r3, #21, #1
+ 8000084:	6013      	str	r3, [r2, #0]
+	GPIOACRH->pins.pin22 = 0;
+ 8000086:	4b1c      	ldr	r3, [pc, #112]	; (80000f8 <main+0xa8>)
+ 8000088:	681a      	ldr	r2, [r3, #0]
+ 800008a:	6813      	ldr	r3, [r2, #0]
+ 800008c:	f36f 5396 	bfc	r3, #22, #1
+ 8000090:	6013      	str	r3, [r2, #0]
+
+	while (1)
+	{
+		int i = 0;
+ 8000092:	2300      	movs	r3, #0
+ 8000094:	607b      	str	r3, [r7, #4]
+		for (i = 0; i < 5000; i++)
+ 8000096:	2300      	movs	r3, #0
+ 8000098:	607b      	str	r3, [r7, #4]
+ 800009a:	e002      	b.n	80000a2 <main+0x52>
+ 800009c:	687b      	ldr	r3, [r7, #4]
+ 800009e:	3301      	adds	r3, #1
+ 80000a0:	607b      	str	r3, [r7, #4]
+ 80000a2:	687b      	ldr	r3, [r7, #4]
+ 80000a4:	f241 3287 	movw	r2, #4999	; 0x1387
+ 80000a8:	4293      	cmp	r3, r2
+ 80000aa:	ddf7      	ble.n	800009c <main+0x4c>
+			;
+		GPIOAODR->pins.pin13 = 1;
+ 80000ac:	4b13      	ldr	r3, [pc, #76]	; (80000fc <main+0xac>)
+ 80000ae:	681a      	ldr	r2, [r3, #0]
+ 80000b0:	6813      	ldr	r3, [r2, #0]
+ 80000b2:	f443 5300 	orr.w	r3, r3, #8192	; 0x2000
+ 80000b6:	6013      	str	r3, [r2, #0]
+		for (i = 0; i < 5000; i++)
+ 80000b8:	2300      	movs	r3, #0
+ 80000ba:	607b      	str	r3, [r7, #4]
+ 80000bc:	e002      	b.n	80000c4 <main+0x74>
+ 80000be:	687b      	ldr	r3, [r7, #4]
+ 80000c0:	3301      	adds	r3, #1
+ 80000c2:	607b      	str	r3, [r7, #4]
+ 80000c4:	687b      	ldr	r3, [r7, #4]
+ 80000c6:	f241 3287 	movw	r2, #4999	; 0x1387
+ 80000ca:	4293      	cmp	r3, r2
+ 80000cc:	ddf7      	ble.n	80000be <main+0x6e>
+			;
+		GPIOAODR->pins.pin13 = 0;
+ 80000ce:	4b0b      	ldr	r3, [pc, #44]	; (80000fc <main+0xac>)
+ 80000d0:	681a      	ldr	r2, [r3, #0]
+ 80000d2:	6813      	ldr	r3, [r2, #0]
+ 80000d4:	f36f 334d 	bfc	r3, #13, #1
+ 80000d8:	6013      	str	r3, [r2, #0]
+		for (i = 0; i < 5000; i++)
+ 80000da:	2300      	movs	r3, #0
+ 80000dc:	607b      	str	r3, [r7, #4]
+ 80000de:	e002      	b.n	80000e6 <main+0x96>
+ 80000e0:	687b      	ldr	r3, [r7, #4]
+ 80000e2:	3301      	adds	r3, #1
+ 80000e4:	607b      	str	r3, [r7, #4]
+ 80000e6:	687b      	ldr	r3, [r7, #4]
+ 80000e8:	f241 3287 	movw	r2, #4999	; 0x1387
+ 80000ec:	4293      	cmp	r3, r2
+ 80000ee:	ddf7      	ble.n	80000e0 <main+0x90>
+	{
+ 80000f0:	e7cf      	b.n	8000092 <main+0x42>
+ 80000f2:	bf00      	nop
+ 80000f4:	08000114 	.word	0x08000114
+ 80000f8:	08000110 	.word	0x08000110
+ 80000fc:	0800010c 	.word	0x0800010c
+
+08000100 <_reset>:
+ 8000100:	faffffd2 	blx	8000050 <main>
+ 8000104:	eafffffe 	b	8000104 <_reset+0x4>
+
+08000108 <Vector_handler>:
+ 8000108:	e7fa      	b.n	8000100 <_reset>
+ 800010a:	46c0      	nop			; (mov r8, r8)

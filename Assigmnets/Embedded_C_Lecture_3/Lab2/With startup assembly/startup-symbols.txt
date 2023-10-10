@@ -1,0 +1,4 @@
+00000000 t _reset
+         U main
+         U stack_top
+00000008 t Vector_handler
